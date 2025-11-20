@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>藝人新聞搜尋系統</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <!-- 導覽列 -->
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>藝人新聞搜尋系統</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#">首頁</a></li>
+      <li><a href="#">說明</a></li>
+      <li><a href="#" role="button">關於</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主內容區 -->
+  <main class="container">
+    <h2>🔍 搜尋藝人新聞</h2>
+    <form id="searchForm">
+      <!-- 藝人選擇 -->
+      <label for="artist">選擇藝人：</label>
+      <select id="artist" name="artist" required>
+        <option value="">請選擇藝人</option>
+        <option>陳浩民</option>
+        <option>林子聰</option>
+        <option>苑瓊丹</option>
+        <option>李蒨蓉</option>
+        <option>林美貞</option>
+        <option>林國基</option>
+        <option>徐新洋</option>
+        <option>宋蕊安(Soa)</option>
+        <option>劉怡里營養師</option>
+        <option>王中皇</option>
+        <option>蔣偉文</option>
+        <option>段鈞豪</option>
+        <option>李培禎</option>
+        <option>陳為民</option>
+        <option>林義傑</option>
+        <option>張振榕</option>
+        <option>莘妮</option>
+        <option>謝懷德</option>
+        <option>檢 場</option>
+        <option>謝麗金</option>
+        <option>林佳儀</option>
+        <option>潘逸安</option>
+        <option>Vivian</option>
+        <option>張伯森</option>
+        <option>潘明德</option>
+        <option>曲艾玲</option>
+        <option>艾力克斯</option>
+        <option>李詠嫻</option>
+        <option>徐乃麟</option>
+        <option>林嘉俐</option>
+        <option>蔡逸帆</option>
+        <option>余荃斌(No name)</option>
+        <option>林凱文</option>
+        <option>潘若迪</option>
+        <option>游書庭</option>
+        <option>劉丞</option>
+        <option>李翊君</option>
+      </select>
+
+      <!-- 新聞媒體多選框 -->
+      <fieldset>
+        <legend>選擇新聞媒體（可多選）</legend>
+        <div id="mediaList">
+          <label><input type="checkbox" value="聯合報" checked> 聯合報</label>
+          <label><input type="checkbox" value="中國時報" checked> 中國時報</label>
+          <label><input type="checkbox" value="鏡新聞" checked> 鏡新聞</label>
+          <label><input type="checkbox" value="自由時報" checked> 自由時報</label>
+          <label><input type="checkbox" value="壹蘋新聞網" checked> 壹蘋新聞網</label>
+          <label><input type="checkbox" value="ETtoday" checked> ETtoday</label>
+          <label><input type="checkbox" value="三立新聞網" checked> 三立新聞網</label>
+          <label><input type="checkbox" value="Yahoo新聞" checked> Yahoo新聞</label>
+          <label><input type="checkbox" value="TVBS新聞網" checked> TVBS新聞網</label>
+          <label><input type="checkbox" value="CTWANT" checked> CTWANT</label>
+          <label><input type="checkbox" value="LIFE生活網" checked> LIFE生活網</label>
+          <label><input type="checkbox" value="Nownews" checked> Nownews</label>
+          <label><input type="checkbox" value="車勢新聞" checked> 車勢新聞</label>
+          <label><input type="checkbox" value="噓星聞" checked> 噓星聞</label>
+          <label><input type="checkbox" value="其他新聞" checked> 其他新聞</label>
+        </div>
+      </fieldset>
+
+      <!-- 時間範圍 -->
+      <label for="dateRange">選擇時間範圍：</label>
+      <select id="dateRange" name="dateRange" required>
+        <option value="today">當天</option>
+        <option value="week">當週</option>
+        <option value="month">當月</option>
+      </select>
+
+      <button type="submit">搜尋</button>
+    </form>
+
+    <hr />
+
+    <!-- 搜尋結果 -->
+    <section id="results">
+      <h3>搜尋結果：</h3>
+      <div id="resultList"></div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <small>© 2025 藝人新聞搜尋系統 • MIT License</small>
+  </footer>
+
+  <script>
+    // 前端處理搜尋
+    const form = document.getElementById('searchForm');
+    const resultList = document.getElementById('resultList');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resultList.innerHTML = '<p>搜尋中，請稍候...</p>';
+
+      const artist = document.getElementById('artist').value;
+      const dateRange = document.getElementById('dateRange').value;
+      const media = Array.from(document.querySelectorAll('#mediaList input:checked')).map(cb => cb.value);
+
+      const res = await fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type'
