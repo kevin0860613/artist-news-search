@@ -1,0 +1,73 @@
+/* ====== 網站整體風格 ====== */
+body {
+  background-color: #fdfdfd;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ====== 標題區 ====== */
+h2, h3 {
+  margin-top: 1.5rem;
+}
+
+/* ====== 表單 ====== */
+form {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* ====== 新聞媒體多選框區塊 ====== */
+#mediaList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* ====== 搜尋結果 ====== */
+#resultList article {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+#resultList article:hover {
+  transform: scale(1.01);
+}
+
+#resultList h4 {
+  margin: 0;
+}
+
+#resultList p {
+  margin: 0.4rem 0;
+}
+
+/* ====== 按鈕 ====== */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ====== 頁尾 ====== */
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+}
