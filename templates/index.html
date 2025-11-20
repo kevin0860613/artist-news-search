@@ -96,7 +96,15 @@
         <option value="today">當天</option>
         <option value="week">當週</option>
         <option value="month">當月</option>
+        <option value="custom">自訂日期區間</option>
       </select>
+
+      <div id="customDateFields" style="display: none; margin-top: 0.5rem;">
+        <label for="startDate">起始日期：</label>
+        <input type="date" id="startDate" name="startDate" />
+        <label for="endDate">結束日期：</label>
+        <input type="date" id="endDate" name="endDate" />
+      </div>
 
       <button type="submit">搜尋</button>
     </form>
@@ -115,6 +123,17 @@
   </footer>
 
   <script>
+    // 日期區間切換邏輯
+    const dateSelect = document.getElementById('dateRange');
+    const customDateFields = document.getElementById('customDateFields');
+    dateSelect.addEventListener('change', () => {
+      if (dateSelect.value === 'custom') {
+        customDateFields.style.display = 'block';
+      } else {
+        customDateFields.style.display = 'none';
+      }
+    });
+
     // 前端處理搜尋
     const form = document.getElementById('searchForm');
     const resultList = document.getElementById('resultList');
@@ -125,8 +144,31 @@
 
       const artist = document.getElementById('artist').value;
       const dateRange = document.getElementById('dateRange').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
       const media = Array.from(document.querySelectorAll('#mediaList input:checked')).map(cb => cb.value);
 
       const res = await fetch('/search', {
         method: 'POST',
-        headers: { 'Content-Type'
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artist, media, dateRange, startDate, endDate })
+      });
+
+      const data = await res.json();
+
+      if (data.length === 0) {
+        resultList.innerHTML = '<p>沒有找到相關新聞。</p>';
+      } else {
+        resultList.innerHTML = data.map(item => `
+          <article>
+            <h4>${item.title}</h4>
+            <p>🗞️ ${item.media}　📅 ${item.date}</p>
+            <p><a href="${item.link}" target="_blank">查看新聞</a></p>
+          </article>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>
+
